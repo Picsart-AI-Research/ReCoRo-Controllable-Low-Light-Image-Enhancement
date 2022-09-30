@@ -10,7 +10,7 @@ Enhancements with both user-specified imprecise and fine matting masks are shown
 ![architecture](/assets/architecture.png)
 
 ## Environment Preparing
-The the code should work on any python >= 3.6 version. 
+The code should work on any python >= 3.6 version. 
 ```pip install -r requirement.txt``` </br>
 ```mkdir model``` </br>
 Download VGG pretrained model from [[Google Drive 1]](https://drive.google.com/file/d/1IfCeihmPqGWJ0KHmH-mTMi_pn3z3Zo-P/view?usp=sharing), and put it into the `model` directory.
