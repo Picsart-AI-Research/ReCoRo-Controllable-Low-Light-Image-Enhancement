@@ -1,0 +1,8 @@
+torch
+torchvision
+torchaudio
+hydra-core
+tensorboard
+tqdm
+scipy
+matplotlib

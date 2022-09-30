@@ -1,0 +1,103 @@
+type: "train"
+data:
+  type: combined
+  shift_index: True
+  alpha_encoder:
+    name: "uniform_0_1"
+    dist: 
+      type: "uniform"
+      min: 0.0
+      max: 1.0
+      n: 11
+    encoding: null
+    dim: 1
+    load: False
+  dataset_A:
+    type: unpaired_mask
+    images_A: ../CLLIE/data/train/final_dataset/trainA/images
+    images_B: ../CLLIE/data/train/final_dataset/trainB/images
+    gt_masks: ../CLLIE/data/train/final_dataset/trainA/masks
+    input_masks: ../CLLIE/data/train/final_dataset/trainA/masks
+    transform:
+      name: crop_flip
+      crop_size: 320
+      norm:
+        mean: 0.5
+        std: 0.5
+    sync_transform:
+      name: sync_crop_flip
+      crop_size: 320
+      norm:
+        mean: 0.5
+        std: 0.5
+    alpha:
+      sampler: "const"
+      value: 1.0
+  dataset_B:
+    type: paired_aug_mask
+    images_A: ../CLLIE/data/Syn_Lowlight_Portrait_Matting/lowlight/train/images_darker
+    images_B: ../CLLIE/data/Syn_Lowlight_Portrait_Matting/original/train/images
+    gt_masks: ../CLLIE/data/Syn_Lowlight_Portrait_Matting/lowlight/train/masks
+    aug_masks: [
+      ../CLLIE/data/Syn_Lowlight_Portrait_Matting/lowlight/train/masks,
+      ../CLLIE/data/Syn_Lowlight_Portrait_Matting/lowlight/train/coarse_masks,
+      ../CLLIE/data/Syn_Lowlight_Portrait_Matting/lowlight/train/distorted_masks,
+      ../CLLIE/data/Syn_Lowlight_Portrait_Matting/lowlight/train/dl_er_masks
+      ]
+    transform:
+      name: None
+    sync_transform:
+      name: sync_norm_flip
+      crop_size: 400
+      norm:
+        mean: 0.5
+        std: 0.5
+    alpha:
+      sampler: "random"
+  eval_dataset:
+    type: paired_mask
+    images_A: ../CLLIE/data/test/testA/images
+    images_B: ../CLLIE/data/test/testB
+    gt_masks: ../CLLIE/data/test/testA/masks_full
+    input_masks: ../CLLIE/data/test/testA/masks_full
+    transform: 
+      name: norm
+      norm:
+        mean: 0.5
+        std: 0.5
+    sync_transform:
+      name: none
+    alpha:
+      sampler: "const"
+      value: 1.0
+  transform: ${data.dataset_A.transform}
+  dataloader:
+    batch_size: 4
+    shuffle: True
+    num_workers: 48
+model:
+  type: ReCoRoGAN
+  generator: Unet_resize_conv_spade
+  has_bn: True
+  discriminator_A: no_norm_5_mask_aux
+  discriminator_P: no_norm_4_mask_aux
+  gan_mode: lsgan
+  loss_reduction: mean
+  optim:
+    lr: 0.0002
+    beta1: 0.5
+    decay: 100
+    decay_start: 100
+  patches:
+    number: 6
+    size: 32
+  vgg:
+    weights_path: ./model/vgg16.weight
+    layer: relu5_1
+  norm: ${data.transform.norm}
+  save_freq: ${save_freq}
+
+epochs: 200
+device: "cuda"
+save_freq: 5
+

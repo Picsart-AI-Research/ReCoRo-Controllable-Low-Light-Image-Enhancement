@@ -1,0 +1,41 @@
+type: "test"
+load_root: ../pretrained/aux_spade_coars_mask/17
+data:
+  type: single_double_mask
+  alpha_encoder:
+    name: "uniform_0_1"
+    dist: 
+      type: "uniform"
+      min: 0.0
+      max: 1.0
+      n: 101
+    encoding: null
+    dim: 1
+    load: False
+    load_dir: ${load_root}
+  dir: ../data/Syn_Lowlight_Portrait_Matting/lowlight/test
+  masks_dir_name: masks
+  transform: 
+    name: norm
+    norm:
+      mean: 0.5
+      std: 0.5
+  dataloader:
+    batch_size: 5
+    shuffle: False
+    num_workers: 4
+  alpha:
+    sampler: "const"
+    value: 1.0
+model:
+  type: ReCoRoGAN
+  generator: Unet_resize_conv_spade
+  has_bn: True
+  discriminator_A: no_norm_5_mask_aux
+  discriminator_P: no_norm_4_mask_aux
+  load_epoch: last
+  label: ""
+  norm: ${data.transform.norm}
+  checkpoints: ${load_root}/checkpoints
+device: "cuda"
+save_freq: 5
