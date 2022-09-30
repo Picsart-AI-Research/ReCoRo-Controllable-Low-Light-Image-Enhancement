@@ -1,6 +1,6 @@
 # ReCoRoGAN
 
-## ACM MULTIMEDIA, 2022, [ReCoRo: Region-Controllable Robust Light Enhancement by User-Specified Imprecise Masks](https://arxiv.org/)  
+### ACM MULTIMEDIA, 2022, [ReCoRo: Region-Controllable Robust Light Enhancement by User-Specified Imprecise Masks](https://arxiv.org/)  
 ReCoRo is a low-light enhancement approach which allows users to directly specify “where" and "how much" they want to enhance an input low-light image. It also possess resilience to various roughly-supplied user masks.  
 
 Enhancements with both user-specified imprecise and fine matting masks are shown bellow (columns: Mask, Input, ReCoRo(ours), EnlightenGAN, ZeroDCE, DRBN, LIME)
